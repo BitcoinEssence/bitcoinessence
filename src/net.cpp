@@ -1479,7 +1479,7 @@ void ThreadMapPort()
             }
         }
 
-        std::string strDesc = "Litecoin " + FormatFullVersion();
+        std::string strDesc = "BitcoinEssence " + FormatFullVersion();
 
         try {
             while (true) {
