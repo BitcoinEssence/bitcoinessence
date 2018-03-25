@@ -85,7 +85,7 @@ void MacDockIconHandler::setIcon(const QIcon &icon)
         image = [[NSImage imageNamed:@"NSApplicationIcon"] retain];
     else {
         // generate NSImage from QIcon and use this as dock icon.
-        QSize size = icon.actualSize(QSize(128, 128));
+        QSize size = icon.actualSize(QSize(1024, 1024));
         QPixmap pixmap = icon.pixmap(size);
 
         // Write image into a R/W buffer from raw pixmap, then save the image.
