@@ -1,21 +1,25 @@
-Litecoin Core integration/staging tree
-=====================================
+BitcoinEssence integration/staging tree
+================================
 
-[![Build Status](https://travis-ci.org/litecoin-project/litecoin.svg?branch=master)](https://travis-ci.org/litecoin-project/litecoin)
+http://www.bitcoinessence.org
+http://www.bitcoinessence.info
 
-https://litecoin.org
+Copyright (c) 2009-2014 Bitcoin Developers, Copyright (c) 2011-2018 Litecoin Developers, Copyright (c) 2018 BitcoinEssence Developers
 
-What is Litecoin?
+What is BitcoinEssence?
 ----------------
 
-Litecoin is an experimental digital currency that enables instant payments to
-anyone, anywhere in the world. Litecoin uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. Litecoin Core is the name of open source
-software which enables the use of this currency.
-
-For more information, as well as an immediately useable, binary version of
-the Litecoin Core software, see [https://litecoin.org](https://litecoin.org).
+BitcoinEssence is a lite version of Bitcoin using Scrypt as a Proof-Of-Work algorithm.
+ - 15 second block targets 
+ - Transaction speed is in 1 second
+ - subsidy halves in 1,575,000 blocks (9 months)
+ - 2,100,000,000 total coins
+ - 500 coins per block 
+ - Using RPC port 9182(testnet19182), P2P port 9183(testnet19183)
+ - 25% premine for continuous develop, marketing cost, 75% reserved for mining
+ 
+ 
+The rest is the same as Bitcoin.  
 
 License
 -------
