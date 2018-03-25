@@ -17,7 +17,7 @@ osx=true
 SIGNER=
 VERSION=
 commit=false
-url=https://github.com/litecoin-project/litecoin
+url=https://github.com/BitcoinEssence/bitcoinessence
 proc=2
 mem=2000
 lxc=true
@@ -31,7 +31,7 @@ commitFiles=true
 read -d '' usage <<- EOF
 Usage: $scriptName [-c|u|v|b|s|B|o|h|j|m|] signer version
 
-Run this script from the directory containing the litecoin, gitian-builder, gitian.sigs.ltc, and litecoin-detached-sigs.
+Run this script from the directory containing the bitcoinessence, gitian-builder, gitian.sigs.bte, and bitcoinessence-detached-sigs.
 
 Arguments:
 signer          GPG signer to sign each build assert file
@@ -39,7 +39,7 @@ version		Version number, commit, or branch to build. If building a commit or bra
 
 Options:
 -c|--commit	Indicate that the version argument is for a commit or branch
--u|--url	Specify the URL of the repository. Default is https://github.com/litecoin-project/litecoin
+-u|--url	Specify the URL of the repository. Default is https://github.com/BitcoinEssence/bitcoinessence
 -v|--verify 	Verify the gitian build
 -b|--build	Do a gitian build
 -s|--sign	Make signed binaries for Windows and Mac OSX
@@ -232,8 +232,8 @@ echo ${COMMIT}
 if [[ $setup = true ]]
 then
     sudo apt-get install ruby apache2 git apt-cacher-ng python-vm-builder qemu-kvm qemu-utils
-    git clone https://github.com/litecoin-project/gitian.sigs.ltc.git
-    git clone https://github.com/litecoin-project/litecoin-detached-sigs.git
+    git clone https://github.com/BitcoinEssence/gitian.sigs.bte.git
+    git clone https://github.com/BitcoinEssence/bitcoinessence-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
     pushd ./gitian-builder
     if [[ -n "$USE_LXC" ]]
@@ -247,7 +247,7 @@ then
 fi
 
 # Set up build
-pushd ./litecoin
+pushd ./bitcoinessence
 git fetch
 git checkout ${COMMIT}
 popd
@@ -256,7 +256,7 @@ popd
 if [[ $build = true ]]
 then
 	# Make output folder
-	mkdir -p ./litecoin-binaries/${VERSION}
+	mkdir -p ./bitcoinessence-binaries/${VERSION}
 	
 	# Build Dependencies
 	echo ""
@@ -266,7 +266,7 @@ then
 	mkdir -p inputs
 	wget -N -P inputs $osslPatchUrl
 	wget -N -P inputs $osslTarUrl
-	make -C ../litecoin/depends download SOURCES_PATH=`pwd`/cache/common
+	make -C ../bitcoinessence/depends download SOURCES_PATH=`pwd`/cache/common
 
 	# Linux
 	if [[ $linux = true ]]
@@ -274,9 +274,9 @@ then
             echo ""
 	    echo "Compiling ${VERSION} Linux"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit litecoin=${COMMIT} --url litecoin=${url} ../litecoin/contrib/gitian-descriptors/gitian-linux.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs.ltc/ ../litecoin/contrib/gitian-descriptors/gitian-linux.yml
-	    mv build/out/litecoin-*.tar.gz build/out/src/litecoin-*.tar.gz ../litecoin-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit bitcoinessence=${COMMIT} --url bitcoinessence=${url} ../bitcoinessence/contrib/gitian-descriptors/gitian-linux.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs.bte/ ../bitcoinessence/contrib/gitian-descriptors/gitian-linux.yml
+	    mv build/out/bitcoinessence-*.tar.gz build/out/src/bitcoinessence-*.tar.gz ../bitcoinessence-binaries/${VERSION}
 	fi
 	# Windows
 	if [[ $windows = true ]]
@@ -284,10 +284,10 @@ then
 	    echo ""
 	    echo "Compiling ${VERSION} Windows"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit litecoin=${COMMIT} --url litecoin=${url} ../litecoin/contrib/gitian-descriptors/gitian-win.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs.ltc/ ../litecoin/contrib/gitian-descriptors/gitian-win.yml
-	    mv build/out/litecoin-*-win-unsigned.tar.gz inputs/litecoin-win-unsigned.tar.gz
-	    mv build/out/litecoin-*.zip build/out/litecoin-*.exe ../litecoin-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit bitcoinessence=${COMMIT} --url bitcoinessence=${url} ../bitcoinessence/contrib/gitian-descriptors/gitian-win.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs.bte/ ../bitcoinessence/contrib/gitian-descriptors/gitian-win.yml
+	    mv build/out/bitcoinessence-*-win-unsigned.tar.gz inputs/bitcoinessence-win-unsigned.tar.gz
+	    mv build/out/bitcoinessence-*.zip build/out/bitcoinessence-*.exe ../bitcoinessence-binaries/${VERSION}
 	fi
 	# Mac OSX
 	if [[ $osx = true ]]
@@ -295,10 +295,10 @@ then
 	    echo ""
 	    echo "Compiling ${VERSION} Mac OSX"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit litecoin=${COMMIT} --url litecoin=${url} ../litecoin/contrib/gitian-descriptors/gitian-osx.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs.ltc/ ../litecoin/contrib/gitian-descriptors/gitian-osx.yml
-	    mv build/out/litecoin-*-osx-unsigned.tar.gz inputs/litecoin-osx-unsigned.tar.gz
-	    mv build/out/litecoin-*.tar.gz build/out/litecoin-*.dmg ../litecoin-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit bitcoinessence=${COMMIT} --url bitcoinessence=${url} ../bitcoinessence/contrib/gitian-descriptors/gitian-osx.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs.bte/ ../bitcoinessence/contrib/gitian-descriptors/gitian-osx.yml
+	    mv build/out/bitcoinessence-*-osx-unsigned.tar.gz inputs/bitcoinessence-osx-unsigned.tar.gz
+	    mv build/out/bitcoinessence-*.tar.gz build/out/bitcoinessence-*.dmg ../bitcoinessence-binaries/${VERSION}
 	fi
 	popd
 
@@ -325,27 +325,27 @@ then
 	echo ""
 	echo "Verifying v${VERSION} Linux"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs.ltc/ -r ${VERSION}-linux ../litecoin/contrib/gitian-descriptors/gitian-linux.yml
+	./bin/gverify -v -d ../gitian.sigs.bte/ -r ${VERSION}-linux ../bitcoinessence/contrib/gitian-descriptors/gitian-linux.yml
 	# Windows
 	echo ""
 	echo "Verifying v${VERSION} Windows"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs.ltc/ -r ${VERSION}-win-unsigned ../litecoin/contrib/gitian-descriptors/gitian-win.yml
+	./bin/gverify -v -d ../gitian.sigs.bte/ -r ${VERSION}-win-unsigned ../bitcoinessence/contrib/gitian-descriptors/gitian-win.yml
 	# Mac OSX	
 	echo ""
 	echo "Verifying v${VERSION} Mac OSX"
 	echo ""	
-	./bin/gverify -v -d ../gitian.sigs.ltc/ -r ${VERSION}-osx-unsigned ../litecoin/contrib/gitian-descriptors/gitian-osx.yml
+	./bin/gverify -v -d ../gitian.sigs.bte/ -r ${VERSION}-osx-unsigned ../bitcoinessence/contrib/gitian-descriptors/gitian-osx.yml
 	# Signed Windows
 	echo ""
 	echo "Verifying v${VERSION} Signed Windows"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs.ltc/ -r ${VERSION}-osx-signed ../litecoin/contrib/gitian-descriptors/gitian-osx-signer.yml
+	./bin/gverify -v -d ../gitian.sigs.bte/ -r ${VERSION}-osx-signed ../bitcoinessence/contrib/gitian-descriptors/gitian-osx-signer.yml
 	# Signed Mac OSX
 	echo ""
 	echo "Verifying v${VERSION} Signed Mac OSX"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs.ltc/ -r ${VERSION}-osx-signed ../litecoin/contrib/gitian-descriptors/gitian-osx-signer.yml	
+	./bin/gverify -v -d ../gitian.sigs.bte/ -r ${VERSION}-osx-signed ../bitcoinessence/contrib/gitian-descriptors/gitian-osx-signer.yml	
 	popd
 fi
 
@@ -360,10 +360,10 @@ then
 	    echo ""
 	    echo "Signing ${VERSION} Windows"
 	    echo ""
-	    ./bin/gbuild -i --commit signature=${COMMIT} ../litecoin/contrib/gitian-descriptors/gitian-win-signer.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs.ltc/ ../litecoin/contrib/gitian-descriptors/gitian-win-signer.yml
-	    mv build/out/litecoin-*win64-setup.exe ../litecoin-binaries/${VERSION}
-	    mv build/out/litecoin-*win32-setup.exe ../litecoin-binaries/${VERSION}
+	    ./bin/gbuild -i --commit signature=${COMMIT} ../bitcoinessence/contrib/gitian-descriptors/gitian-win-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs.bte/ ../bitcoinessence/contrib/gitian-descriptors/gitian-win-signer.yml
+	    mv build/out/bitcoinessence-*win64-setup.exe ../bitcoinessence-binaries/${VERSION}
+	    mv build/out/bitcoinessence-*win32-setup.exe ../bitcoinessence-binaries/${VERSION}
 	fi
 	# Sign Mac OSX
 	if [[ $osx = true ]]
@@ -371,9 +371,9 @@ then
 	    echo ""
 	    echo "Signing ${VERSION} Mac OSX"
 	    echo ""
-	    ./bin/gbuild -i --commit signature=${COMMIT} ../litecoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs.ltc/ ../litecoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    mv build/out/litecoin-osx-signed.dmg ../litecoin-binaries/${VERSION}/litecoin-${VERSION}-osx.dmg
+	    ./bin/gbuild -i --commit signature=${COMMIT} ../bitcoinessence/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs.bte/ ../bitcoinessence/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    mv build/out/bitcoinessence-osx-signed.dmg ../bitcoinessence-binaries/${VERSION}/bitcoinessence-${VERSION}-osx.dmg
 	fi
 	popd
 
