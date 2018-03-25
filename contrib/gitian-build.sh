@@ -304,11 +304,11 @@ then
 
         if [[ $commitFiles = true ]]
         then
-	    # Commit to gitian.sigs repo
+	    # Commit to gitian.sigs.bte repo
             echo ""
             echo "Committing ${VERSION} Unsigned Sigs"
             echo ""
-            pushd gitian.sigs
+            pushd gitian.sigs.bte
             git add ${VERSION}-linux/${SIGNER}
             git add ${VERSION}-win-unsigned/${SIGNER}
             git add ${VERSION}-osx-unsigned/${SIGNER}
@@ -380,7 +380,7 @@ then
         if [[ $commitFiles = true ]]
         then
             # Commit Sigs
-            pushd gitian.sigs
+            pushd gitian.sigs.bte
             echo ""
             echo "Committing ${VERSION} Signed Sigs"
             echo ""
