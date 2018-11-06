@@ -1,26 +1,27 @@
 ---
-name: "bitcoinessence-win-0.15"
+name: "bte-win-0.16"
 enable_cache: true
 suites:
-- "trusty"
+- "bionic"
 architectures:
 - "amd64"
 packages:
+- "autoconf"
+- "automake"
+- "bsdmainutils"
+- "ca-certificates"
 - "curl"
+- "faketime"
+- "g++-mingw-w64-i686"
+- "g++-mingw-w64-x86-64"
 - "g++"
 - "git-core"
-- "pkg-config"
-- "autoconf"
 - "libtool"
-- "automake"
-- "faketime"
-- "bsdmainutils"
-- "mingw-w64"
-- "g++-mingw-w64"
+- "mingw-w64-i686-dev"
 - "nsis"
-- "zip"
-- "ca-certificates"
+- "pkg-config"
 - "python"
+- "zip"
 remotes:
 - "url": "https://github.com/BitcoinEssence/bitcoinessence.git"
   "dir": "bitcoinessence"
@@ -28,7 +29,7 @@ files: []
 script: |
   WRAP_DIR=$HOME/wrapped
   HOSTS="i686-w64-mingw32 x86_64-w64-mingw32"
-  CONFIGFLAGS="--enable-reduce-exports --disable-bench --disable-gui-tests"
+  CONFIGFLAGS="--enable-reduce-exports"
   FAKETIME_HOST_PROGS="g++ ar ranlib nm windres strip objcopy"
   FAKETIME_PROGS="date makensis zip"
   HOST_CFLAGS="-O2 -g"
@@ -119,7 +120,7 @@ script: |
   ./autogen.sh
   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
   make dist
-  SOURCEDIST=`echo bitcoinessence-*.tar.gz`
+  SOURCEDIST=`echo bte-*.tar.gz`
   DISTNAME=`echo ${SOURCEDIST} | sed 's/.tar.*//'`
 
   # Correct tar file order

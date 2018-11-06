@@ -32,6 +32,10 @@
     </context>
 <context>
     <name>Intro</name>
+    <message>
+        <source>Litecoin</source>
+        <translation>Litecoin</translation>
+    </message>
     </context>
 <context>
     <name>ModalOverlay</name>

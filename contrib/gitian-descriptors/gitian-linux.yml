@@ -1,31 +1,26 @@
 ---
-name: "bitcoinessence-linux-0.15"
+name: "bte-linux-0.16"
 enable_cache: true
 suites:
-- "trusty"
+- "bionic"
 architectures:
 - "amd64"
 packages:
-- "curl"
-- "g++-aarch64-linux-gnu"
-- "g++-4.8-aarch64-linux-gnu"
-- "gcc-4.8-aarch64-linux-gnu"
-- "binutils-aarch64-linux-gnu"
-- "g++-arm-linux-gnueabihf"
-- "g++-4.8-arm-linux-gnueabihf"
-- "gcc-4.8-arm-linux-gnueabihf"
-- "binutils-arm-linux-gnueabihf"
-- "g++-4.8-multilib"
-- "gcc-4.8-multilib"
-- "binutils-gold"
-- "git-core"
-- "pkg-config"
 - "autoconf"
-- "libtool"
 - "automake"
-- "faketime"
+- "autotools-dev"
 - "bsdmainutils"
+- "build-essential"
 - "ca-certificates"
+- "cmake"
+- "curl"
+- "faketime"
+- "g++-multilib"
+- "gcc-multilib"
+- "git-core"
+- "libtool"
+- "make"
+- "pkg-config"
 - "python"
 remotes:
 - "url": "https://github.com/BitcoinEssence/bitcoinessence.git"
@@ -34,8 +29,8 @@ files: []
 script: |
 
   WRAP_DIR=$HOME/wrapped
-  HOSTS="i686-pc-linux-gnu x86_64-linux-gnu arm-linux-gnueabihf aarch64-linux-gnu"
-  CONFIGFLAGS="--enable-glibc-back-compat --enable-reduce-exports --disable-bench --disable-gui-tests"
+  HOSTS="x86_64-linux-gnu"
+  CONFIGFLAGS="--enable-glibc-back-compat --enable-reduce-exports"
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="date ar ranlib nm"
   HOST_CFLAGS="-O2 -g"
@@ -135,7 +130,7 @@ script: |
   ./autogen.sh
   CONFIG_SITE=${BASEPREFIX}/`echo "${HOSTS}" | awk '{print $1;}'`/share/config.site ./configure --prefix=/
   make dist
-  SOURCEDIST=`echo bitcoinessence-*.tar.gz`
+  SOURCEDIST=`echo bte-*.tar.gz`
   DISTNAME=`echo ${SOURCEDIST} | sed 's/.tar.*//'`
   # Correct tar file order
   mkdir -p temp
@@ -166,27 +161,17 @@ script: |
     make ${MAKEOPTS}
     make ${MAKEOPTS} -C src check-security
 
-    #TODO: This is a quick hack that disables symbol checking for arm.
-    #      Instead, we should investigate why these are popping up.
-    #      For aarch64, we'll need to bump up the min GLIBC version, as the abi
-    #      support wasn't introduced until 2.17.
-    case $i in
-       aarch64-*) : ;;
-       arm-*) : ;;
-       *) make ${MAKEOPTS} -C src check-symbols ;;
-    esac
-
     make install DESTDIR=${INSTALLPATH}
     cd installed
     find . -name "lib*.la" -delete
     find . -name "lib*.a" -delete
     rm -rf ${DISTNAME}/lib/pkgconfig
- 
+
     # bitcoinessence: Delete libbitcoin from binary distribution for now, see #192
     rm -rf ${DISTNAME}/lib/
     rm -rf ${DISTNAME}/include/
     # bitcoinessence: ends
- 
+
     find ${DISTNAME}/bin -type f -executable -exec ../contrib/devtools/split-debug.sh {} {} {}.dbg \;
     #find ${DISTNAME}/lib -type f -exec ../contrib/devtools/split-debug.sh {} {} {}.dbg \; # bitcoinessence: see issue 192
     find ${DISTNAME} -not -name "*.dbg" | sort | tar --no-recursion --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 -c -T - | gzip -9n > ${OUTDIR}/${DISTNAME}-${i}.tar.gz
