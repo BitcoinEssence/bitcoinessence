@@ -125,7 +125,7 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x1b34c7d6dd39ed47e6c15e7d90e7727143432c9107603b512d209f7d486d56d1"));
 
         // Note that of those with the service bits flag, most only support a subset of possible options
-        vSeeds.emplace_back("54.190.205.17", false);
+        vSeeds.emplace_back("167.86.113.8", false);
         vSeeds.emplace_back("wsxdrvps.cafe24.com", false);
         vSeeds.emplace_back("wsxdr3.cafe24.com", false);
 
